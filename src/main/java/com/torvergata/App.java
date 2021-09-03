@@ -5,11 +5,10 @@ import java.util.logging.Logger;
 
 public class App 
 {
-    private static Logger logger;
-    
+   
     public static void main( String[] args ) throws Exception
     {
-        logger = Logger.getLogger("App");
+        Logger logger = Logger.getLogger("App");
 
         String projectName ="BOOKKEEPER";
 
