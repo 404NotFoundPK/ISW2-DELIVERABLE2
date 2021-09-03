@@ -25,8 +25,7 @@ public class GeJiraReleases {
     public static void main(String[] args) throws Exception {
 	Logger logger = Logger.getLogger(GeJiraReleases.class.getName());
         String projectName ="BOOKKEEPER";
-		List<Release> newReleaseNames = getReleases(projectName);
-		logger.info("Releases:" + newReleaseNames.size());
+	List<Release> newReleaseNames = getReleases(projectName);
 	}
 
 	public static List<Release> getReleases(String projectName) throws Exception {
