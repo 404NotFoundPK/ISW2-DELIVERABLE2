@@ -29,7 +29,7 @@ public class GetJiraIssues {
     public static void main(String[] args) throws Exception {
 		logger = Logger.getLogger(GetJiraIssues.class.getName());
         String projectName ="TAJO";
-	    // String projectName ="BOOKKEEPER";
+
 
 		List<Release> releases = GeJiraReleases.getReleases(projectName);
 		
