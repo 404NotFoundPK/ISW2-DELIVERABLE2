@@ -2,6 +2,8 @@ package com.torvergata;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -12,8 +14,10 @@ import java.util.Map.Entry;
 import java.util.stream.*;
 
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.*;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.json.JSONException;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
