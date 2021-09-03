@@ -28,8 +28,8 @@ public class GetJiraIssues {
 
     public static void main(String[] args) throws Exception {
 		logger = Logger.getLogger(GetJiraIssues.class.getName());
-        // String projectName ="TAJO";
-	    String projectName ="BOOKKEEPER";
+        String projectName ="TAJO";
+	    // String projectName ="BOOKKEEPER";
 
 		List<Release> releases = GeJiraReleases.getReleases(projectName);
 		
@@ -72,7 +72,14 @@ public class GetJiraIssues {
 				JSONArray fixVersions = fields.getJSONArray("fixVersions");
 				String openVersion = getVersionFromDate(releases, createdDate);
 
-				addIssue(issues, key, createdDate, releaseDate, openVersion, fixVersions, versions, releases);
+				Issue newIssue = addIssue(key, createdDate, releaseDate, openVersion, fixVersions, versions);
+
+				if (!issues.contains(newIssue)) {
+					if (newIssue.getFixedVers().isEmpty()) {
+						newIssue.setFixedVers(getVersionFromDate(releases, releaseDate));
+					}
+					issues.add(newIssue);
+				}
 				
 			}
 		}
@@ -146,8 +153,8 @@ public class GetJiraIssues {
 		+ "fields=key,fixVersions,versions,created,resolutiondate&startAt="+ startAt + "&maxResults=" + maxResults + "";
 	}
 			
-	private static void addIssue(List<Issue> issues, String id, LocalDate creationDate,LocalDate resolutionDate, String openVers,
-				JSONArray fixedVersions, JSONArray affectedVersions, List<Release> releases) {
+	private static Issue addIssue(String id, LocalDate creationDate,LocalDate resolutionDate, String openVers,
+				JSONArray fixedVersions, JSONArray affectedVersions) {
 		// injection version is first from affected version
 		// affected version == versions from json
 		// fixed == fixed versions from json
@@ -174,13 +181,7 @@ public class GetJiraIssues {
 			fixVersions[i] = fversion;
 		}
 
-		Issue issue = new Issue(id, creationDate, resolutionDate, openVers, aVersions, fixVersions);
-		if (!issues.contains(issue)) {
-			if (issue.getFixedVers().isEmpty()) {
-				issue.setFixedVers(getVersionFromDate(releases, resolutionDate));
-			}
-			issues.add(issue);
-		}
+		return new Issue(id, creationDate, resolutionDate, openVers, aVersions, fixVersions);
 	}
 
 	private static boolean isNumeric(String str){
