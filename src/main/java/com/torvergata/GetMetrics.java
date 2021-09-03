@@ -26,25 +26,11 @@ public class GetMetrics {
 		logger = Logger.getLogger(GetMetrics.class.getName());
 
         String projectName ="TAJO";
-        // String projectName ="BOOKKEEPER";
 
         String localPath = "D:\\GitCommits\\" + projectName + "-git\\.git";
-        // String repositoryURL = "https://github.com/apache/"+ projectName + ".git";
-
-        // if git open error the clone
-        // try {
-        //     Git git = Git.open(new File(localPath));
-        //     git.close();
-        // } catch (Exception e) {
-		// 	logger.log(Level.INFO, "Starting Cloning Repository");
-		// 	Git git = Git.cloneRepository().setURI(repositoryURL).setDirectory(new File(localPath)).call();
-		// 	logger.log(Level.INFO, "Repository cloned Succesfully");
-		//     git.close();
-        // }
-       
-
-		List<Release> releases = GeJiraReleases.getReleases(projectName);
-        int halfIndex = (int)(releases.size()/2 + 0.5);
+             
+	List<Release> releases = GeJiraReleases.getReleases(projectName);
+        int halfIndex = (int)((double)releases.size()/2 + 0.5);
         var halfVersions = releases.subList(0, halfIndex);
 
         List<Issue> issues = GetJiraIssues.getIssues(projectName, releases);
