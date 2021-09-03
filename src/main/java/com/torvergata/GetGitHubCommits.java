@@ -210,7 +210,7 @@ public class GetGitHubCommits {
 				df.close();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.log(Level.INFO, e.toString());
 		}
 
 		int numberOfFiles = files.size();
@@ -254,7 +254,7 @@ public class GetGitHubCommits {
 				count++;
 			}
 		} catch (IOException e) {
-			e.printStackTrace(); 	
+			logger.log(Level.INFO, e.toString());	
 		}
 
 		return count;
