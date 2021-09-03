@@ -26,10 +26,24 @@ public class GetMetrics {
 		logger = Logger.getLogger(GetMetrics.class.getName());
 
         String projectName ="TAJO";
+        // String projectName ="BOOKKEEPER";
 
         String localPath = "D:\\GitCommits\\" + projectName + "-git\\.git";
-             
-	List<Release> releases = GeJiraReleases.getReleases(projectName);
+        // String repositoryURL = "https://github.com/apache/"+ projectName + ".git";
+
+        // if git open error the clone
+        // try {
+        //     Git git = Git.open(new File(localPath));
+        //     git.close();
+        // } catch (Exception e) {
+		// 	logger.log(Level.INFO, "Starting Cloning Repository");
+		// 	Git git = Git.cloneRepository().setURI(repositoryURL).setDirectory(new File(localPath)).call();
+		// 	logger.log(Level.INFO, "Repository cloned Succesfully");
+		//     git.close();
+        // }
+       
+
+		List<Release> releases = GeJiraReleases.getReleases(projectName);
         int halfIndex = (int)((double)releases.size()/2 + 0.5);
         var halfVersions = releases.subList(0, halfIndex);
 
@@ -41,20 +55,20 @@ public class GetMetrics {
         List<FileExtended> newFiles = setOpenedVersion(files, issues);
 
 
-		List<FileMetrics> filesWithMetrics = getMetricsForAllFiles(newFiles, releases, projectName);
+		List<FileMetrics> filesWithMetrics = getMetricsForAllFiles(newFiles, halfVersions, projectName);
 
         writeCSV(filesWithMetrics, projectName);
         writeArff(filesWithMetrics, projectName);
 
         // write arff for every verion
-        for (Release release : releases) {
+        for (Release release : halfVersions) {
             writeCSVWeka(filesWithMetrics, projectName, release.getVersionNumber());
         }
 
         logger.log(Level.INFO, "Wrote classes: {0}", Integer.toString(newFiles.size()));
 	}
 
-    public static void startGetMetrics(String projectName) throws Exception {
+    public static void startGetMetrics(String projectName) throws JSONException, IOException, ParseException, GitAPIException {
         logger = Logger.getLogger(GetMetrics.class.getName());
 
         String localPath = "D:\\GitCommits\\" + projectName + "-git\\.git";
@@ -73,7 +87,7 @@ public class GetMetrics {
        
 
 		List<Release> releases = GeJiraReleases.getReleases(projectName);
-        int halfIndex = (int)(releases.size()/2 + 0.5);
+        int halfIndex = (int)((double)releases.size()/2 + 0.5);
         var halfVersions = releases.subList(0, halfIndex);
 
         List<Issue> issues = GetJiraIssues.getIssues(projectName, releases);
@@ -444,7 +458,7 @@ public class GetMetrics {
 			fileWriter.flush();
 
 		} catch (Exception e) {
-			logger.log(java.util.logging.Level.SEVERE, "Error in csv writer.");
+			logger.log(java.util.logging.Level.SEVERE, "Error in csv metrics writer.");
 		}
     }
 
@@ -532,7 +546,7 @@ public class GetMetrics {
 			fileWriter.flush();
 
 		} catch (Exception e) {
-			logger.log(java.util.logging.Level.SEVERE, "Error in csv writer.");
+			logger.log(java.util.logging.Level.SEVERE, "Error in arff writer.");
 		}
     }
 
