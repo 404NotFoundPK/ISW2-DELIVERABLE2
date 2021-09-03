@@ -11,13 +11,12 @@ public class App
     {
         logger = Logger.getLogger("App");
 
-        // String projectName ="TAJO";
         String projectName ="BOOKKEEPER";
 
         GetMetrics.startGetMetrics(projectName);
 
-		List<Release> releases = GeJiraReleases.getReleases(projectName);
-		int halfIndex = (int)(releases.size()/2 + 0.5);
+	List<Release> releases = GeJiraReleases.getReleases(projectName);
+	int halfIndex = (int)((double)releases.size()/2 + 0.5);
         var halfVersions = releases.subList(0, halfIndex);
 
 		GetWeka.createSets(halfVersions, projectName);
