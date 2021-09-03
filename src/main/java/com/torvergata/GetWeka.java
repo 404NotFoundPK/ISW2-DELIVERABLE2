@@ -34,16 +34,14 @@ public class GetWeka {
 
 	
     static  String projectName ="TAJO";
-    // static String projectName ="BOOKKEEPER";
 
     public static void main(String[] args) throws Exception {
 		logger = Logger.getLogger(GetMetrics.class.getName());
 
 		String projectName ="TAJO";
-		// String projectName ="BOOKKEEPER";
 
 		List<Release> releases = GeJiraReleases.getReleases(projectName);
-		int halfIndex = (int)(releases.size()/2 + 0.5);
+		int halfIndex = (int)((double)releases.size()/2 + 0.5);
         var halfVersions = releases.subList(0, halfIndex);
 
 		createSets(halfVersions, projectName);
