@@ -20,15 +20,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class GeJiraReleases {
-	public static List<Release> releases;
+	private static List<Release> releases;
 
     public static void main(String[] args) throws Exception {
-	Logger logger = Logger.getLogger(GeJiraReleases.class.getName());
-        String projectName ="BOOKKEEPER";
-	List<Release> newReleaseNames = getReleases(projectName);
+		Logger logger = Logger.getLogger(GeJiraReleases.class.getName());
+        String projectName ="TAJO";
+        // String projectName ="BOOKKEEPER";
+		List<Release> newReleaseNames = getReleases(projectName);
+		logger.log(Level.INFO, "Releases: {0} ", newReleaseNames.size()); 
 	}
 
-	public static List<Release> getReleases(String projectName) throws Exception {
+	public static List<Release> getReleases(String projectName) throws JSONException, IOException {
 		Logger logger = Logger.getLogger(GeJiraReleases.class.getName());
 		
 		//Fills the arraylist with issues dates
@@ -40,7 +42,7 @@ public class GeJiraReleases {
 		JSONObject json = readJsonFromUrl(url);
 		if (json.has("total")) {
 			total = (Integer) json.get("total");
-			System.out.println(total);
+			logger.log(Level.INFO, "Releases: {0} ", total); 
 		}
 
 		JSONArray versions = json.getJSONArray("versions");
@@ -51,11 +53,15 @@ public class GeJiraReleases {
 			String name = "";
 			String id = "";
 			if(versions.getJSONObject(i).has("releaseDate")) {
-				if (versions.getJSONObject(i).has("name"))
-				   name1 = versions.getJSONObject(i).get("name").toString();
-				   name = name1.replace("-incubating", ".0");
+				if (versions.getJSONObject(i).has("name")) {
+					name1 = versions.getJSONObject(i).get("name").toString();
+					name = name1.replace("-incubating", ".0");
+				}
 				if (versions.getJSONObject(i).has("id"))
-				   id = versions.getJSONObject(i).get("id").toString();
+				{
+					id = versions.getJSONObject(i).get("id").toString();
+				}
+
 				addRelease(versions.getJSONObject(i).get("releaseDate").toString(),
 						   name,id);
 			 }
