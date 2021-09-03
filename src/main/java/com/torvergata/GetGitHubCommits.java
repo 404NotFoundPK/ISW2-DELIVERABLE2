@@ -41,14 +41,14 @@ public class GetGitHubCommits {
 	private static String projectName ="TAJO";
 	// private static String projectName ="BOOKKEEPER";
 
-    public static void main(String[] args) throws Exception {
+        public static void main(String[] args) throws Exception {
         String localPath = "D:\\GitCommits\\" + projectName + "-git\\.git";
 		
 		logger = Logger.getLogger("GetGitHubCommits");
 
 		List<Release> releases = GeJiraReleases.getReleases(projectName);
 		List<FileExtended> totalFiles = getCommits(localPath, projectName, releases);
-		logger.log(Level.INFO, "total files: " + totalFiles.size());
+		logger.log(Level.INFO, "total files: {0}", totalFiles.size());
     
     }
 
@@ -128,7 +128,7 @@ public class GetGitHubCommits {
 						}
 						
 					}
-					logger.info("Commit tag : " + tagName + " : " + conta);
+					logger.log(Level.INFO, "Tag commits: {0}", conta);
 					globalConta+=conta;
 				// end tag
 				// remove duplicate files in version
@@ -139,7 +139,7 @@ public class GetGitHubCommits {
 
 		}
 
-		logger.log(Level.INFO, "Commit tag : " + globalConta);
+		logger.log(Level.INFO, "Commit tag : {0}", globalConta);
 		}
 
 		logger.log(Level.INFO, "Fine get files and commits");
@@ -210,7 +210,7 @@ public class GetGitHubCommits {
 				df.close();
 			}
 		} catch (IOException e) {
-			logger.log(Level.INFO, e.toString());
+			e.printStackTrace();
 		}
 
 		int numberOfFiles = files.size();
@@ -254,7 +254,7 @@ public class GetGitHubCommits {
 				count++;
 			}
 		} catch (IOException e) {
-			logger.log(Level.INFO, e.toString());	
+			e.printStackTrace(); 	
 		}
 
 		return count;
